@@ -1,0 +1,32 @@
+# Illustrative compose file for the trip bot as a sibling service.
+# If Cooking-Assistant is deployed via TrueNAS SCALE Custom App / Portainer
+# rather than compose, use this only as a reference for the env vars and
+# volume the trip-bot container needs — recreate it as a Custom App instead.
+version: "3.8"
+
+services:
+  austria-trip-bot:
+    build: .
+    # Once you wire up a GitHub Action like Cooking-Assistant's, swap to:
+    # image: ghcr.io/<your-gh-username>/austria-trip-bot:latest
+    container_name: austria-trip-bot
+    restart: unless-stopped
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+      TRIP_TZ: Europe/Vienna
+      BRIEFING_HOUR: "20"
+      MORNING_HOUR: "8"
+      CLAUDE_MODEL: claude-sonnet-4-5
+    volumes:
+      # Not critical the way a WhatsApp session was — the bot token is
+      # stateless — but keep it persistent for future features (e.g. an
+      # hourly weather-watch that needs to remember its last state).
+      - ./data:/app/data
+
+  # cooking-assistant:
+  #   already exists in your stack — shown here only so both services are
+  #   visible together if you manage them from one compose file.
+  #   image: ghcr.io/<owner>/cooking-assistant:latest
+  #   ...

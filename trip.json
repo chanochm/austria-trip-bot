@@ -1,0 +1,217 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "Trip knowledge base for the Marmorstein family Austria bot. Feed this to the Claude agent as context/tools. Extend freely — attractions list covers the majors + all booking-critical items.",
+    "family": {
+      "adults": 2,
+      "children_ages": [14, 12, 10, 5],
+      "observant": true,
+      "notes": "Shomer Shabbat + kashrut. No driving/activities/phone on Shabbat — everything for Shabbat must be arranged before candle-lighting."
+    },
+    "language": "he",
+    "bot_persona": "Warm, concise Hebrew-speaking family trip companion. Proactive but not naggy. Always considers weather, drive time, Shabbat, kid ages (5yo tires/naps), and what needs pre-booking."
+  },
+  "cards": {
+    "zell_kaprun_summer_card": {
+      "name": "Zell am See-Kaprun Sommerkarte",
+      "how_to_get": "Collect free from the Kaprun apartment-hotel reception on arrival.",
+      "covers_area": "Kaprun / Zell am See region (days Aug 19-23)"
+    },
+    "salzburgerland_card": {
+      "name": "SalzburgerLand Card",
+      "how_to_get": "Buy the 12-day version (price gap vs 6-day is small). Have it before the first SalzburgerLand attraction (Aug 23).",
+      "covers_area": "Wider Salzburgerland (Krimml, Gastein, Golling, Hallein salt mine, Salzburg city, most spas & lakes)",
+      "salzburg_city_rule": "In Salzburg city, the card gives free entry to all city attractions for 24h from first validation. Do the city in one day (Aug 30)."
+    }
+  },
+  "locations": {
+    "kaprun":      {"lat": 47.270, "lon": 12.755},
+    "zell_am_see": {"lat": 47.323, "lon": 12.797},
+    "krimml":      {"lat": 47.217, "lon": 12.174},
+    "neukirchen":  {"lat": 47.250, "lon": 12.274},
+    "wagrain":     {"lat": 47.334, "lon": 13.298},
+    "flachau":     {"lat": 47.345, "lon": 13.390},
+    "dorfgastein": {"lat": 47.243, "lon": 13.105},
+    "bad_hofgastein": {"lat": 47.170, "lon": 13.100},
+    "radstadt":    {"lat": 47.386, "lon": 13.457},
+    "untertauern": {"lat": 47.300, "lon": 13.470},
+    "golling":     {"lat": 47.600, "lon": 13.163},
+    "gosau":       {"lat": 47.560, "lon": 13.490},
+    "altenmarkt":  {"lat": 47.383, "lon": 13.417},
+    "hallein_durrnberg": {"lat": 47.665, "lon": 13.075},
+    "anif":        {"lat": 47.750, "lon": 13.060},
+    "salzburg":    {"lat": 47.800, "lon": 13.045},
+    "prague":      {"lat": 50.087, "lon": 14.421}
+  },
+  "lodging": [
+    {"base": "kaprun", "checkin": "2026-08-18", "checkout": "2026-08-24"},
+    {"base": "wagrain", "checkin": "2026-08-24", "checkout": "2026-08-31"}
+  ],
+  "days": [
+    {
+      "date": "2026-08-17", "weekday": "Mon", "is_shabbat": false, "base": "prague",
+      "type": "travel",
+      "summary": "Evening flight ~18:00, land in Prague, overnight in Prague.",
+      "reminders_due_today": ["esim_active", "kosher_flight_meal", "meat_frozen_solid"]
+    },
+    {
+      "date": "2026-08-18", "weekday": "Tue", "is_shabbat": false, "base": "kaprun",
+      "type": "travel",
+      "summary": "Morning: pick up rental car at airport. Drive Prague -> Kaprun (~4.5-5h). Settle in, groceries.",
+      "reminders_due_today": ["vignette_x2", "collect_zell_card", "notify_rental_border", "get_meat_into_freezer"]
+    },
+    {
+      "date": "2026-08-19", "weekday": "Wed", "is_shabbat": false, "base": "kaprun",
+      "guide_day": 1, "title": "Kaprun Dam + Zell lake cruise",
+      "options": ["kaprun_dam", "zell_lake_cruise", "thumersbach_lido"]
+    },
+    {
+      "date": "2026-08-20", "weekday": "Thu", "is_shabbat": false, "base": "kaprun",
+      "guide_day": 2, "title": "Kitzsteinhorn (snow), mountain slides, gorge",
+      "options": ["kitzsteinhorn", "maisiflitzer", "sigmund_thun_gorge"],
+      "weather_rule": "Do Kitzsteinhorn on a clear/partly-cloudy day for the panorama — swap with another Kaprun day if tomorrow is clearer."
+    },
+    {
+      "date": "2026-08-21", "weekday": "Fri", "is_shabbat_eve": true, "base": "kaprun",
+      "guide_day": 3, "title": "Schmittenhöhe / Kitzlochklamm / Tauern Spa — SHORT DAY (Shabbat comes in)",
+      "options": ["schmittenhohe", "kitzlochklamm", "tauern_spa"],
+      "shabbat_note": "Candle-lighting ~19:45-20:00 (VERIFY). Be back and cooking done early. Prep all Shabbat food today."
+    },
+    {
+      "date": "2026-08-22", "weekday": "Sat", "is_shabbat": true, "base": "kaprun",
+      "type": "shabbat", "title": "Shabbat — rest in Kaprun. No driving/activities."
+    },
+    {
+      "date": "2026-08-23", "weekday": "Sun", "is_shabbat": false, "base": "kaprun",
+      "guide_day": 4, "title": "Krimml Falls OR 10-Slides trail + secret lake",
+      "options": ["krimml_falls", "ten_slides_wildkogel", "hintersee", "uttendorf_lake"],
+      "choice_note": "Pick ONE main: Krimml falls (~55min) OR 10-slides (~40min). Unlikely to do both."
+    },
+    {
+      "date": "2026-08-24", "weekday": "Mon", "is_shabbat": false, "base": "wagrain",
+      "guide_day": 5, "type": "move", "title": "Move Kaprun -> Wagrain (~50min) via Liechtenstein Gorge",
+      "options": ["liechtenstein_gorge", "wagrain_wasserwelt", "soccerpark_wagrain"]
+    },
+    {
+      "date": "2026-08-25", "weekday": "Tue", "is_shabbat": false, "base": "wagrain",
+      "guide_day": 6, "title": "Woody-Bob cable car, free animal park, Radstadt pools",
+      "options": ["obertauern_bobby_lift", "untertauern_animal_park", "radstadt_pool", "radstadt_minigolf", "stmartin_woodybob"]
+    },
+    {
+      "date": "2026-08-26", "weekday": "Wed", "is_shabbat": false, "base": "wagrain",
+      "guide_day": 7, "title": "Gastein valley — Spiegelsee lake, mountain cart, Alpentherme",
+      "options": ["fulseck_spiegelsee", "gastein_mountaincart", "solarbad_dorfgastein", "alpentherme_bad_hofgastein"]
+    },
+    {
+      "date": "2026-08-27", "weekday": "Thu", "is_shabbat": false, "base": "wagrain",
+      "guide_day": 8, "title": "Golling Falls, Lammerklamm, Gosausee, Aqua Salza",
+      "options": ["durrnberg_slides", "golling_falls", "lammerklamm", "gosausee", "aqua_salza"]
+    },
+    {
+      "date": "2026-08-28", "weekday": "Fri", "is_shabbat_eve": true, "base": "wagrain",
+      "guide_day": 9, "title": "Flachau — Star Jet lift, Lucky Flitzer slides, Jägersee — SHORT DAY (Shabbat)",
+      "options": ["flachau_starjet", "lucky_flitzer", "jagersee", "flachau_ebikes", "therme_amade"],
+      "shabbat_note": "Candle-lighting ~19:40-19:55 (VERIFY). Prep all Shabbat food today."
+    },
+    {
+      "date": "2026-08-29", "weekday": "Sat", "is_shabbat": true, "base": "wagrain",
+      "type": "shabbat", "title": "Shabbat — rest in Wagrain. No driving/activities."
+    },
+    {
+      "date": "2026-08-30", "weekday": "Sun", "is_shabbat": false, "base": "salzburg",
+      "guide_day": 10, "title": "Hallein Salt Mine + Salzburg city (guide mislabels this 29.8)",
+      "options": ["durrnberg_salt_mine", "anif_ropes_park", "bluntausee", "salzburg_fortress", "salzburg_natural_history_museum", "mozart_birthplace", "moenchsberg_lift", "salzburg_river_cruise"],
+      "note": "IMPORTANT: guide labels this 'day 10 = 29.8', but 29.8 is Shabbat. It actually falls Sun 30.8. Salzburg card 24h rule: do all city attractions today."
+    },
+    {
+      "date": "2026-08-31", "weekday": "Mon", "is_shabbat": false, "base": "prague",
+      "type": "travel", "title": "Drive back to Prague. Optional one attraction + refresh stop en route."
+    }
+  ],
+  "attractions": {
+    "kaprun_dam":        {"name": "Kaprun High Mountain Dam", "town": "kaprun", "card": "zell", "needs_booking": false, "cash_only": false, "indoor": false, "kid_ok": true, "weather_dependent": true, "duration_h": 4, "note": "Bus+funicular up takes 45-60min each way."},
+    "zell_lake_cruise":  {"name": "Lake Zell panorama cruise", "town": "zell_am_see", "card": "zell", "needs_booking": false, "cash_only": false, "indoor": false, "kid_ok": true, "weather_dependent": true, "duration_h": 1, "note": "Hourly 10:00-17:00. Small fee for upper deck."},
+    "thumersbach_lido":  {"name": "Lido Thumersbach beach/pool", "town": "zell_am_see", "card": "zell", "needs_booking": false, "indoor": false, "kid_ok": true, "weather_dependent": true, "swim": true, "note": "Hot-day option. Indoor pool on the lake also available for cool days."},
+    "kitzsteinhorn":     {"name": "Kitzsteinhorn 3029m + Ice Arena snow park", "town": "kaprun", "card": "zell", "needs_booking": false, "indoor": false, "kid_ok": true, "weather_dependent": true, "needs_clear_sky": true, "duration_h": 4, "bring": ["warm jacket", "gloves", "hat"], "note": "Snow park July-Aug. Do on a CLEAR day."},
+    "maisiflitzer":      {"name": "Maisiflitzer mountain slide", "town": "kaprun", "card": "none", "needs_booking": false, "indoor": false, "kid_ok": true, "note": "NOT included in card. Buy multi-ride ticket."},
+    "sigmund_thun_gorge":{"name": "Sigmund-Thun-Klamm gorge", "town": "kaprun", "card": "zell", "needs_booking": false, "indoor": false, "kid_ok": true, "weather_dependent": false, "note": "Do the long loop incl. Klammsee lake."},
+    "schmittenhohe":     {"name": "Schmittenhöhe cable car + kids park", "town": "zell_am_see", "card": "zell", "needs_booking": false, "indoor": false, "kid_ok": true, "weather_dependent": true, "note": "Great for the kids' ages; motorized kids' bikes."},
+    "kitzlochklamm":     {"name": "Kitzlochklamm gorge", "town": "kaprun", "card": "none", "needs_booking": false, "cash_only": false, "indoor": false, "kid_ok": true, "price": "11€ adult / 7.5€ child", "hours": "until 16:00", "duration_h": 1.5},
+    "tauern_spa":        {"name": "Tauern Spa Kaprun", "town": "kaprun", "card": "partial", "needs_booking": false, "indoor": true, "kid_ok": true, "weather_dependent": false, "note": "NOT free with card — card gives +1 bonus hour on a 3h ticket. Best rainy-day option."},
+    "krimml_falls":      {"name": "Krimml Waterfalls (Europe's highest)", "town": "krimml", "card": "salzburgerland", "needs_booking": false, "cash_only": false, "indoor": false, "kid_ok": true, "weather_dependent": true, "duration_h": 3, "hours": "09:00-17:00 (last entry 16:30)", "note": "Parking P4/P5 free with card. ~55min from Kaprun. Optional taxi up (~7€/person, pay on site)."},
+    "ten_slides_wildkogel": {"name": "10-Slides trail Wildkogel", "town": "neukirchen", "card": "salzburgerland", "needs_booking": false, "cash_only": false, "indoor": false, "kid_ok": true, "weather_dependent": true, "note": "Lift included with card. Slide mats ~3€. Black slides age 7+."},
+    "hintersee":         {"name": "Hintersee (secret lake)", "town": "neukirchen", "card": "none", "needs_booking": false, "cash_only": true, "indoor": false, "kid_ok": true, "price": "~5-7€ parking (coins)", "note": "Picnic spot. Keep it quiet :)"},
+    "uttendorf_lake":    {"name": "Uttendorfer Erlebnisbadesee", "town": "kaprun", "card": "salzburgerland", "needs_booking": false, "indoor": false, "kid_ok": true, "swim": true, "weather_dependent": true, "note": "Hot-day swim lake with water slide."},
+    "liechtenstein_gorge": {"name": "Liechtenstein Gorge", "town": "wagrain", "card": "salzburgerland", "needs_booking": false, "indoor": false, "kid_ok": true, "weather_dependent": false, "note": "440 steps total. Go early or after 16:00 (less crowded). Don't bring heavy bags."},
+    "wagrain_wasserwelt":{"name": "Wagrain Wasserwelt pools", "town": "wagrain", "card": "salzburgerland", "needs_booking": false, "indoor": true, "kid_ok": true, "weather_dependent": false, "note": "Indoor + outdoor slides. Works on rainy days (indoor part)."},
+    "soccerpark_wagrain":{"name": "Soccer-Golf Park Wagrain", "town": "wagrain", "card": "none", "needs_booking": false, "indoor": false, "kid_ok": true, "price": "~10-14€/person (5% family disc.)", "note": "Closed shoes required. ~1.5-2h."},
+    "obertauern_bobby_lift": {"name": "Bobby scenic lift + pedal-boat lake", "town": "untertauern", "card": "salzburgerland", "needs_booking": false, "cash_only": true, "indoor": false, "kid_ok": true, "note": "Wooden ball track 2€ (coins). Bring small change."},
+    "untertauern_animal_park": {"name": "Free animal park (feed/catch-your-fish)", "town": "untertauern", "card": "free", "needs_booking": false, "indoor": false, "kid_ok": true, "hours": "until 18:00", "note": "Donation-based. Catch a trout, grill on site — big hit with kids."},
+    "radstadt_pool":     {"name": "Radstadt heated outdoor pool", "town": "radstadt", "card": "salzburgerland", "needs_booking": false, "indoor": false, "kid_ok": true, "swim": true, "weather_dependent": true, "hours": "until 19:00"},
+    "radstadt_minigolf": {"name": "Radstadt family minigolf", "town": "radstadt", "card": "salzburgerland", "needs_booking": false, "indoor": false, "kid_ok": true, "note": "Cool-day alternative to the pool."},
+    "stmartin_woodybob": {"name": "Woody-Bob mountain toboggan St. Martin", "town": "radstadt", "card": "salzburgerland", "needs_booking": false, "indoor": false, "kid_ok": true, "hours": "summer until 18-19"},
+    "fulseck_spiegelsee": {"name": "Fulseck lift + Spiegelsee alpine lake walk", "town": "dorfgastein", "card": "salzburgerland", "needs_booking": false, "indoor": false, "kid_ok": true, "weather_dependent": true, "duration_h": 2.5, "note": "~4.5km easy-moderate. Start from the top. Ask at cashier for the map."},
+    "gastein_mountaincart": {"name": "Mountain Cart Fulseck (4.8km)", "town": "dorfgastein", "card": "none", "needs_booking": true, "cash_only": false, "indoor": false, "kid_ok": true, "price": "12€ adult / 6€ child", "min_age": "10yo or 140cm to ride alone", "note": "MUST reserve online in advance."},
+    "solarbad_dorfgastein": {"name": "Solarbad Dorfgastein pool", "town": "dorfgastein", "card": "salzburgerland", "needs_booking": false, "indoor": false, "kid_ok": true, "swim": true},
+    "alpentherme_bad_hofgastein": {"name": "Alpentherme Gastein", "town": "bad_hofgastein", "card": "salzburgerland", "needs_booking": false, "indoor": true, "kid_ok": true, "weather_dependent": false, "note": "Best spa in the region. Free 4h with card."},
+    "durrnberg_slides":  {"name": "Dürrnberg summer toboggan (2.2km)", "town": "hallein_durrnberg", "card": "none", "needs_booking": false, "cash_only": false, "indoor": false, "kid_ok": true, "min_age": 3, "price": "13-19.5€ (family/multi-ride discounts)", "weather_dependent": true, "note": "NOT included in card (Abtenau slides closed 2026). Check open before going."},
+    "golling_falls":     {"name": "Golling Waterfall", "town": "golling", "card": "salzburgerland", "needs_booking": false, "cash_only": true, "indoor": false, "kid_ok": true, "note": "Small parking fee (coins). Easy family walk."},
+    "lammerklamm":       {"name": "Lammerklamm gorge", "town": "golling", "card": "salzburgerland", "needs_booking": false, "indoor": false, "kid_ok": true, "note": "~1.3km each way, out-and-back."},
+    "gosausee":          {"name": "Gosausee lake loop", "town": "gosau", "card": "salzburgerland", "needs_booking": false, "indoor": false, "kid_ok": true, "weather_dependent": true, "duration_h": 1.5, "note": "4km flat, stroller-friendly. Lift free with card. Electric boat rental (paid)."},
+    "aqua_salza":        {"name": "Aqua Salza Golling spa", "town": "golling", "card": "salzburgerland", "needs_booking": false, "indoor": true, "kid_ok": true, "hours": "CLOSES 20:00 (earlier than others)", "note": "Arrive before dusk for the outdoor hot pool."},
+    "flachau_starjet":   {"name": "Star Jet 1 lift + Flori's adventure trail", "town": "flachau", "card": "salzburgerland", "needs_booking": false, "indoor": false, "kid_ok": true, "note": "~2km circular kids' trivia trail."},
+    "lucky_flitzer":     {"name": "Lucky Flitzer alpine slides", "town": "flachau", "card": "none", "needs_booking": false, "indoor": false, "kid_ok": true, "price": "12€ adult / 10€ child (cheaper multi-ride)", "hours": "summer until 22:00"},
+    "jagersee":          {"name": "Jägersee lake", "town": "wagrain", "card": "none", "needs_booking": false, "indoor": false, "kid_ok": true, "weather_dependent": true, "note": "Easy loop, rowboat rental. Beautiful drive via Kleinarl."},
+    "flachau_ebikes":    {"name": "Flachau half-electric bike rental", "town": "flachau", "card": "none", "needs_booking": true, "indoor": false, "kid_ok": true, "note": "Reserve a few days ahead — very popular in summer."},
+    "therme_amade":      {"name": "Therme Amadé Altenmarkt", "town": "altenmarkt", "card": "salzburgerland", "needs_booking": false, "indoor": true, "kid_ok": true, "hours": "until 22:00", "note": "Free 4h with card. Great late/rainy-day option."},
+    "durrnberg_salt_mine": {"name": "Hallein/Dürrnberg Salt Mine", "town": "hallein_durrnberg", "card": "salzburgerland", "needs_booking": true, "cash_only": false, "indoor": true, "kid_ok": true, "weather_dependent": false, "note": "RESERVE ONLINE in advance; pick Salzburg tab and enter card number to make it free. Download 'SALZWELTEN' app for Hebrew audio guide."},
+    "anif_ropes_park":   {"name": "Kletterpark Salzburg (Anif ropes park)", "town": "anif", "card": "none", "needs_booking": true, "cash_only": true, "indoor": false, "kid_ok": true, "note": "CASH ONLY. Reserve ahead (small private park). Toddler course too. Swim lake next door."},
+    "bluntausee":        {"name": "Bluntausee clear lake", "town": "golling", "card": "none", "needs_booking": false, "cash_only": true, "indoor": false, "kid_ok": true, "price": "7€ parking (coins)", "note": "20min walk to a crystal-clear trout lake."},
+    "salzburg_fortress": {"name": "Hohensalzburg Fortress", "town": "salzburg", "card": "salzburgerland", "needs_booking": false, "indoor": false, "kid_ok": true, "note": "Funicular up. 360° views. 1-2h."},
+    "salzburg_natural_history_museum": {"name": "Haus der Natur (Natural History Museum)", "town": "salzburg", "card": "salzburgerland", "needs_booking": false, "indoor": true, "kid_ok": true, "weather_dependent": false, "note": "Best rainy-day option in the city. Dinosaurs, space, human body."},
+    "mozart_birthplace": {"name": "Mozart's Birthplace", "town": "salzburg", "card": "salzburgerland", "needs_booking": false, "indoor": true, "kid_ok": false, "note": "Short visit; skip if not into it."},
+    "moenchsberg_lift":  {"name": "Mönchsberg lift + secret wall promenade", "town": "salzburg", "card": "salzburgerland", "needs_booking": false, "indoor": false, "kid_ok": true, "note": "Great viewpoint, less crowded."},
+    "salzburg_river_cruise": {"name": "Salzach river cruise", "town": "salzburg", "card": "salzburgerland", "needs_booking": false, "indoor": false, "kid_ok": true, "hours": "13:00-18:00 hourly", "duration_h": 0.75}
+  },
+  "reminders": [
+    {"id": "intl_driving_permit", "text": "Get International Driving Permit for every driver (~8₪, at photo/optics shops)", "due": "2026-08-16", "category": "docs"},
+    {"id": "esim_active", "text": "Activate VOYE eSIM (regional/European for German border crossings) before the flight", "due": "2026-08-17", "category": "comms"},
+    {"id": "kosher_flight_meal", "text": "Confirm pre-ordered kosher meals for the flight", "due": "2026-08-15", "category": "food"},
+    {"id": "meat_frozen_solid", "text": "Meat packed frozen-solid in insulated bag; in Prague hotel put in freezer/fridge overnight", "due": "2026-08-17", "category": "food"},
+    {"id": "get_meat_into_freezer", "text": "On arrival in Kaprun, get all meat into the apartment freezer ASAP", "due": "2026-08-18", "category": "food"},
+    {"id": "vignette_x2", "text": "Buy 2x Vignette toll stickers at a gas station near the Austrian border; ask them to punch your dates (>10 days needs 2)", "due": "2026-08-18", "category": "driving"},
+    {"id": "notify_rental_border", "text": "Tell the rental desk you'll cross into Germany (cross-border insurance ~25-30€)", "due": "2026-08-18", "category": "driving"},
+    {"id": "collect_zell_card", "text": "Collect the free Zell am See-Kaprun Summer Card from the apartment reception", "due": "2026-08-18", "category": "cards"},
+    {"id": "buy_salzburgerland_card", "text": "Buy the 12-day SalzburgerLand Card (before the Krimml/Salzburgerland day)", "due": "2026-08-22", "category": "cards"},
+    {"id": "book_mountaincart", "text": "Reserve the Gastein/Fulseck Mountain Cart online in advance", "due": "2026-08-24", "category": "booking"},
+    {"id": "book_ebikes", "text": "Reserve Flachau e-bikes a few days ahead (popular in summer)", "due": "2026-08-24", "category": "booking"},
+    {"id": "book_salt_mine", "text": "Reserve the Hallein Salt Mine online (Salzburg tab + card number = free)", "due": "2026-08-28", "category": "booking"},
+    {"id": "book_ropes_park", "text": "Reserve Anif ropes park ahead — CASH ONLY, bring cash", "due": "2026-08-28", "category": "booking"},
+    {"id": "shabbat1_prep", "text": "Prep ALL Shabbat food today; candle-lighting ~19:45-20:00 (verify). Cooking done before then.", "due": "2026-08-21", "category": "shabbat"},
+    {"id": "shabbat2_prep", "text": "Prep ALL Shabbat food today; candle-lighting ~19:40-19:55 (verify). Cooking done before then.", "due": "2026-08-28", "category": "shabbat"},
+    {"id": "coins_daily", "text": "Keep 50c/1-2€ coins for parking meters, toilets, ball-track & fish-food machines", "due": "recurring", "category": "money"}
+  ],
+  "weather_rules": {
+    "_comment": "Drive tomorrow's recommendation off Open-Meteo for the base town. These map to the guide's own advice.",
+    "clear_or_partly_cloudy": {
+      "prioritize": ["kitzsteinhorn", "fulseck_spiegelsee", "schmittenhohe", "krimml_falls", "gosausee"],
+      "reason": "High-mountain viewpoints need clear skies. Kitzsteinhorn especially — don't waste it on a cloudy day."
+    },
+    "hot": {
+      "prioritize": ["thumersbach_lido", "hintersee", "uttendorf_lake", "jagersee", "bluntausee", "radstadt_pool", "solarbad_dorfgastein"],
+      "reason": "Lakes and outdoor pools. Bring swimwear, towels, picnic."
+    },
+    "rain_or_cold": {
+      "prioritize": ["tauern_spa", "alpentherme_bad_hofgastein", "therme_amade", "aqua_salza", "wagrain_wasserwelt", "durrnberg_salt_mine", "salzburg_natural_history_museum"],
+      "reason": "Thermal spas + indoor museums + the salt mine (indoor). Gorges are fine in light rain too."
+    }
+  },
+  "agent_rules": [
+    "Never suggest driving or activities on Shabbat (Fri sunset to Sat night). On Fridays, push everyone to finish early and prep food.",
+    "Every recommendation must fit the day's base town and account for drive time + the 5-year-old's stamina (build in a rest/swim).",
+    "When an attraction needs_booking=true, surface the reminder the EVENING BEFORE, not the morning of.",
+    "cash_only=true attractions -> remind to bring cash that morning.",
+    "Match tomorrow's plan to the weather forecast using weather_rules; if the flagship viewpoint day (Kitzsteinhorn) has bad weather, propose swapping days.",
+    "Respond in Hebrew, warm and concise. One clear recommendation + 1-2 alternates, not a wall of options."
+  ]
+}

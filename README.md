@@ -21,6 +21,11 @@ optional short morning nudge.
 - **Scheduler**: `node-cron`, timezone-aware (`TRIP_TZ`).
 - **Trip data**: `data/trip.json` — 15 days, attractions, reminders,
   weather-recommendation rules. Edit this file directly to adjust the plan.
+- **Kosher list**: `data/kosher.json` — the Vienna Kashrus Committee's
+  Hamadrich supervision list (~2000 searchable entries: food, drinks, and
+  OTC medications with their exact status, required hechsher, and notes).
+  The agent has a `search_kosher_food` tool over it — ask things like "is
+  Nutella kosher" or "can I take Aspirin on Pessach" in the group.
 
 ## Setup
 
@@ -59,8 +64,10 @@ npm test
 ```
 
 Covers weather classification, trip-data lookups (including both Shabbat
-dates), and reminder resolution (explicit + dynamic booking/cash nudges).
-No network or Telegram connection required.
+dates), reminder resolution (explicit + dynamic booking/cash nudges), and
+kosher-list search (including that a brand-level warning note doesn't bury
+the specific flagged product it's warning about). No network or Telegram
+connection required.
 
 ## Deploying alongside Cooking-Assistant on TrueNAS
 
@@ -95,6 +102,12 @@ state), not required for day-to-day operation.
 - Shabbat dates in the plan (22.8, 29.8) already correct a mislabeling in
   the original written itinerary (which called the Salzburg day "29.8" —
   that's actually a Saturday; the real Salzburg day is Sunday 30.8).
+- The kosher list is a transcription of one dated PDF (Hamadrich, issue
+  Juni 26) from one specific supervising body. It's not a live feed and it
+  doesn't cover every product in the world — the agent is instructed to
+  say so when nothing matches, rather than guess. Treat it as a lookup aid
+  for what's already in the list, not a substitute for checking directly
+  with a rabbi/hechsher for anything not covered or safety-critical.
 
 ## Security
 

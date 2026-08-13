@@ -1,5 +1,6 @@
 import { config, assertRuntimeConfig } from './config.js';
 import { TripData } from './tripData.js';
+import { KosherData } from './kosherData.js';
 import { connectTelegram, onMessage } from './telegram.js';
 import { answerMessage } from './agent.js';
 import { startScheduler } from './scheduler.js';
@@ -11,9 +12,17 @@ async function main() {
   const tripData = new TripData(config.tripDataPath);
   console.log(`[Trip] loaded ${tripData.raw.days.length} days, ${Object.keys(tripData.raw.attractions).length} attractions.`);
 
+  let kosherData = null;
+  try {
+    kosherData = new KosherData(config.kosherDataPath);
+    console.log(`[Kosher] loaded ${kosherData.records.length} searchable entries from ${kosherData.meta.title} (${kosherData.meta.issue_label}).`);
+  } catch (err) {
+    console.warn('[Kosher] no kosher list loaded — search_kosher_food will be unavailable.', err.message);
+  }
+
   onMessage(async (text, senderName, chatId, isGroup) => {
     const today = todayInTz(config.tripTz);
-    return answerMessage(tripData, text, { senderName, todayStr: today });
+    return answerMessage(tripData, text, { senderName, todayStr: today, kosherData });
   });
 
   await connectTelegram();

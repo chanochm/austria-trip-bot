@@ -48,9 +48,18 @@ const TOOLS = [
     description: 'Get family info, lodging bases/dates, and the two regional cards (how to get them, what they cover).',
     input_schema: { type: 'object', properties: {} },
   },
+  {
+    name: 'search_kosher_food',
+    description: "Search the Vienna kashrus supervision list (Hamadrich) for a brand or product name (e.g. 'Nutella', 'Red Bull', 'Aspirin'). Returns matching entries with their exact status ('Ok' = approved, 'Nicht Für Pessach' = kosher year-round but not for Passover, 'Nicht Koscher' = not kosher), any required certification/hechsher, and notes. Covers food, drinks, and over-the-counter medications.",
+    input_schema: {
+      type: 'object',
+      properties: { query: { type: 'string', description: 'Brand or product name to search for' } },
+      required: ['query'],
+    },
+  },
 ];
 
-async function executeTool(tripData, name, input) {
+async function executeTool(tripData, name, input, kosherData) {
   switch (name) {
     case 'get_weather_forecast': {
       const days = input.days ?? 2;
@@ -76,13 +85,20 @@ async function executeTool(tripData, name, input) {
         cards: tripData.raw.cards,
       };
     }
+    case 'search_kosher_food': {
+      if (!kosherData) return { error: 'Kosher list not loaded' };
+      const results = kosherData.search(input.query);
+      return results.length
+        ? results
+        : { note: `No match for "${input.query}" in the Hamadrich list. Absence from the list does not by itself mean not kosher — it just means this specific list has no entry for it.` };
+    }
     default:
       return { error: `Unknown tool: ${name}` };
   }
 }
 
-function systemPrompt(tripData, todayStr) {
-  return [
+function systemPrompt(tripData, todayStr, kosherData) {
+  const lines = [
     tripData.meta.bot_persona,
     '',
     `היום הוא ${todayStr} (אזור זמן ${config.tripTz}).`,
@@ -91,15 +107,30 @@ function systemPrompt(tripData, todayStr) {
     ...tripData.agentRules.map((r) => `- ${r}`),
     '',
     'יש לך כלים (tools) לשליפת מזג אוויר, תוכנית יומית, תזכורות וחיפוש אטרקציות — השתמש בהם במקום לנחש.',
-    'תמיד תענה בעברית, חם ותכליתי.',
-  ].join('\n');
+  ];
+
+  if (kosherData) {
+    lines.push(
+      '',
+      `יש לך גם כלי search_kosher_food לחיפוש ברשימת הכשרות של ${kosherData.meta.publisher} (${kosherData.meta.supervising_rabbi}), מהדורת ${kosherData.meta.issue_label}.`,
+      'כללים לשימוש בכלי הכשרות:',
+      '- תמיד תשתמש בכלי הזה במקום לנחש אם משהו כשר — אל תסתמך על ידע כללי.',
+      '- דווח את השדה status בדיוק כפי שהוא: "Ok" = מאושר, "Nicht Für Pessach" = כשר כל השנה חוץ מפסח, "Nicht Koscher" = לא כשר.',
+      '- אם דרוש הכשר מסוים (certification_required), ציין זאת במפורש — המוצר כשר רק עם הסימון הזה.',
+      '- שים לב: הערה (note) ברמת המותג יכולה להתייחס לחריגים בטעמים/גרסאות ספציפיות אחרות, לא בהכרח למוצר שנשאל עליו — קרא בעיון.',
+      '- אם אין תוצאה ברשימה, אמור בבירור שהמוצר לא מופיע ברשימה הזו (זה לא אומר בהכרח שהוא לא כשר) ושכדאי לבדוק ישירות מול רב/הכשר מקומי.'
+    );
+  }
+
+  lines.push('', 'תמיד תענה בעברית, חם ותכליתי.');
+  return lines.join('\n');
 }
 
 /**
  * Interactive chat: full tool-use loop, for arbitrary questions from the
  * family in the Telegram group.
  */
-export async function answerMessage(tripData, userText, { senderName = '', todayStr } = {}) {
+export async function answerMessage(tripData, userText, { senderName = '', todayStr, kosherData } = {}) {
   const anthropic = new Anthropic({ apiKey: config.anthropicApiKey });
   const today = todayStr || new Date().toISOString().slice(0, 10);
 
@@ -114,7 +145,7 @@ export async function answerMessage(tripData, userText, { senderName = '', today
     const response = await anthropic.messages.create({
       model: config.claudeModel,
       max_tokens: 1024,
-      system: systemPrompt(tripData, today),
+      system: systemPrompt(tripData, today, kosherData),
       tools: TOOLS,
       messages,
     });
@@ -134,7 +165,7 @@ export async function answerMessage(tripData, userText, { senderName = '', today
       toolUses.map(async (tu) => {
         let result;
         try {
-          result = await executeTool(tripData, tu.name, tu.input);
+          result = await executeTool(tripData, tu.name, tu.input, kosherData);
         } catch (err) {
           result = { error: String(err?.message || err) };
         }
@@ -195,7 +226,7 @@ export async function buildEveningBriefing(tripData, forDateStr) {
       {
         role: 'user',
         content: [
-          'כתוב תדריך ערב קצר וחם למשפחה על מחר, בעברית, לשליחה בוואטסאפ.',
+          'כתוב תדריך ערב קצר וחם למשפחה על מחר, בעברית, לשליחה בטלגרם.',
           'כלול: המלצה אחת ברורה + עד 2 חלופות (לפי מזג האוויר אם קיים), ותזכורות רלוונטיות (הזמנות/מזומן) אם יש.',
           'אל תמציא נתונים שלא נמסרו לך. אם אין תחזית, פשוט דלג על החלק הזה.',
           '',

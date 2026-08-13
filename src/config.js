@@ -18,6 +18,7 @@ export const config = {
   briefingHour: Number(process.env.BRIEFING_HOUR ?? 20),
   morningHour: process.env.MORNING_HOUR ? Number(process.env.MORNING_HOUR) : null,
   tripDataPath: path.resolve(process.cwd(), process.env.TRIP_DATA_PATH || 'data/trip.json'),
+  kosherDataPath: path.resolve(process.cwd(), process.env.KOSHER_DATA_PATH || 'data/kosher.json'),
   stateFilePath: path.resolve(process.cwd(), 'data/state.json'),
 };
 
